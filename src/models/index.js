@@ -22,4 +22,8 @@ const sequelizeDatabase = new Sequelize(DATABASE_URL, {
 const FoodModel = foodSchema(sequelizeDatabase, DataTypes);
 const ClothesModel = clothesSchema(sequelizeDatabase, DataTypes);
 
-module.exports = {sequelizeDatabase, FoodModel, ClothesModel};
+module.exports = {
+  sequelizeDatabase,
+  foodInterface: new ModelInterface(FoodModel),
+  clothesInterface: new ModelInterface(ClothesModel),
+};

@@ -1,13 +1,13 @@
 'use strict';
 
 const express = require('express');
-const { FoodModel } = require('../models/');
+const { foodInterface } = require('../models/');
 
 const router = express.Router();
 
 router.get('/food', async (req, res, next) => {
   try {
-    const allRecords = await FoodModel.findAll();
+    const allRecords = await foodInterface.findAll();
     res.status(200).send(allRecords);
   } catch (error) {
     res.status(404).send('Not found');
@@ -17,7 +17,7 @@ router.get('/food', async (req, res, next) => {
 router.get('/food/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const selectedRecord = await FoodModel.findOne({where: { id }});
+    const selectedRecord = await foodInterface.findOne({where: { id }});
     res.status(200).send(selectedRecord);
   } catch (error) {
     res.status(404).send('Not found');
@@ -27,7 +27,7 @@ router.get('/food/:id', async (req, res, next) => {
 router.post('/food', async (req, res, next) => {
   const food = req.body;
   try {
-    let response = await FoodModel.create(food);
+    let response = await foodInterface.create(food);
     console.log('response: ', response);
     res.status(200).send(response);
   } catch (error) {
@@ -39,7 +39,7 @@ router.put('/food/:id', async (req, res, next) => {
   const { id } = req.params;
   const updatedRecord = req.body;
   try {
-    const selectedRecord = await FoodModel.findOne({where: { id }});
+    const selectedRecord = await foodInterface.findOne({where: { id }});
     await selectedRecord.update(updatedRecord);
     await selectedRecord.save();
     res.status(200).send(selectedRecord);
@@ -51,7 +51,7 @@ router.put('/food/:id', async (req, res, next) => {
 router.delete('/food/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const recordToDelete = await FoodModel.findOne({where: { id }});
+    const recordToDelete = await foodInterface.findOne({where: { id }});
     await recordToDelete.destroy();
     res.status(200).send(recordToDelete);
   } catch (error) {

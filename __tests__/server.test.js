@@ -2,7 +2,7 @@
 
 const supertest = require('supertest');
 const { app } = require('../src/server');
-const { sequelizeDatabase } = require('../src/models/index');
+const { sequelizeDatabase } = require('../src/models/');
 const request = supertest(app);
 
 beforeAll(async () => {
@@ -30,7 +30,17 @@ describe('Testing REST API', () => {
   };
 
   describe('Testing CRUD status', () => {
+
+
     describe('Food route', () => {
+
+      test('Add a single record using POST', async () => {
+        let res = await request.post('/food').send(food);
+        expect(res.status).toEqual(200);
+        expect(res.body.name).toEqual('Chow Mein');
+        expect(res.body.cuisine).toEqual('chinese');
+      });
+
       test('Return JSON object', async () => {
         let res = await request.get('/food');
         expect(res.status).toEqual(200);
@@ -41,12 +51,6 @@ describe('Testing REST API', () => {
         expect(res.status).toEqual(200);
       });
 
-      test('Add a single record using POST', async () => {
-        let res = await request.post('/food').send(food);
-        expect(res.status).toEqual(200);
-        expect(res.body.name).toEqual('Chow Mein');
-        expect(res.body.cuisine).toEqual('chinese');
-      });
 
       test('Update a record using PUT', async () => {
         let res = await request.put('/food/1');

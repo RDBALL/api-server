@@ -1,5 +1,4 @@
 'use strict';
-//following the code review (Robert Shepley) from lecture. Test suite passes
 let logger = require('../src/middleware/logger');
 
 describe('Test Logger Middleware', () => {
