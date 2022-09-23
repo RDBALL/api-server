@@ -21,7 +21,7 @@ app.use(clothesRoute);
 
 
 app.get('/', (req, res) => {
-  res.status(200).send('👍 Server is running for RDBALL Code 401d48 Lab03.');
+  res.status(200).send('👍 Server is running for RDBALL Code 401d48 Lab04.');
 });
 
 app.use('*', errorNotFound);
