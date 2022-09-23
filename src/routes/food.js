@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/food', async (req, res, next) => {
   try {
-    const allRecords = await foodInterface.findAll();
+    const allRecords = await foodInterface.read();
     res.status(200).send(allRecords);
   } catch (error) {
     res.status(404).send('Not found');
@@ -17,7 +17,7 @@ router.get('/food', async (req, res, next) => {
 router.get('/food/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const selectedRecord = await foodInterface.findOne({where: { id }});
+    const selectedRecord = await foodInterface.read({where: { id }});
     res.status(200).send(selectedRecord);
   } catch (error) {
     res.status(404).send('Not found');
@@ -36,24 +36,21 @@ router.post('/food', async (req, res, next) => {
 });
 
 router.put('/food/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const updatedRecord = req.body;
   try {
-    const selectedRecord = await foodInterface.findOne({where: { id }});
-    await selectedRecord.update(updatedRecord);
-    await selectedRecord.save();
-    res.status(200).send(selectedRecord);
+    const itemID = req.params.id;
+    const data = req.body;
+    const itemToUpdate = await foodInterface.update(data, itemID);
+    res.status(200).send(itemToUpdate);
   } catch (error) {
     res.status(404).send('Cannot perform this method');
   }
 });
 
 router.delete('/food/:id', async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const recordToDelete = await foodInterface.findOne({where: { id }});
-    await recordToDelete.destroy();
-    res.status(200).send(recordToDelete);
+    const recordToDelete = req.params.id;
+    await foodInterface.delete(recordToDelete);
+    res.status(200).send('Item Deleted');
   } catch (error) {
     res.status(404).send('Cannot perform this method');
   }

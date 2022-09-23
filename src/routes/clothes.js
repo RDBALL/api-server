@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/clothes', async (req, res, next) => {
   try {
-    const allRecords = await clothesInterface.findAll();
+    const allRecords = await clothesInterface.read();
     res.status(200).send(allRecords);
   } catch (error) {
     res.status(404).send('Not found');
@@ -17,7 +17,7 @@ router.get('/clothes', async (req, res, next) => {
 router.get('/clothes/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const selectedRecord = await clothesInterface.findOne({where: { id }});
+    const selectedRecord = await clothesInterface.read({where: { id }});
     res.status(200).send(selectedRecord);
   } catch (error) {
     res.status(404).send('Not found');
@@ -36,24 +36,21 @@ router.post('/clothes', async (req, res, next) => {
 });
 
 router.put('/clothes/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const updatedRecord = req.body;
   try {
-    const selectedRecord = await clothesInterface.findOne({where: { id }});
-    await selectedRecord.update(updatedRecord);
-    await selectedRecord.save();
-    res.status(200).send(selectedRecord);
+    const itemID = req.params.id;
+    const data = req.body;
+    const itemToUpdate = await clothesInterface.update(data, itemID);
+    res.status(200).send(itemToUpdate);
   } catch (error) {
     res.status(404).send('Cannot perform this method');
   }
 });
 
 router.delete('/clothes/:id', async (req, res, next) => {
-  const { id } = req.params;
   try {
-    const recordToDelete = await clothesInterface.findOne({where: { id }});
-    await recordToDelete.destroy();
-    res.status(200).send(recordToDelete);
+    const recordToDelete = req.params.id;
+    await clothesInterface.delete(recordToDelete);
+    res.status(200).send('Item Deleted');
   } catch (error) {
     res.status(404).send('Cannot perform this method');
   }
